@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+# Homebrew Bitterness Units - a measure of alpha acids added to a brew.
+#
+# HBU = oz. hops * % alpha acid
+
+GramsPerOunce = 28.349523
+
+def usage s = nil
+  $stderr.puts(s) unless s.nil?
+  $stderr.puts("Usage: #{File.basename($0)}: [ALPHA_ACID]% [[HOPS]g [HOPS]oz]")
+  $stderr.puts("       #{File.basename($0)}: [ALPHA_ACID]% [HBU]hbu")
+  $stderr.puts("       #{File.basename($0)}: [HBU]hbu [[HOPS]g [HOPS]oz]")
+  exit(2)
+end
+
+def cook string, discard, ratio = 1
+  string.sub(discard, '').to_f / ratio
+end
+
+usage unless ARGV.length == 2
+
+loop { case ARGV[0]
+  when /^[0-9.]+%$/   then $alpha_acid = cook(ARGV.shift, /%$/)
+  when /^[0-9.]+oz$/  then $hops       = cook(ARGV.shift, /oz$/)
+  when /^[0-9.]+g$/   then $hops       = cook(ARGV.shift, /g$/, GramsPerOunce)
+  when /^[0-9.]+hbu$/ then $hbu        = ARGV.shift.to_f
+  when /.*/           then usage
+  else break
+end; }
+
+if $alpha_acid && $hops
+  puts '%0.2f HBU' % "#{$alpha_acid * $hops}"
+end
+
+if $alpha_acid && $hbu
+  puts '%0.2f oz hops OR' % "#{$hbu / $alpha_acid}"
+  puts '%0.2f g  hops' % "#{$hbu / $alpha_acid * GramsPerOunce}"
+end
+
+if $hops && $hbu
+  puts '%0.2f%% alpha acid' % "#{$hbu / $hops}"
+end
