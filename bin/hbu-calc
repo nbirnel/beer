@@ -3,6 +3,7 @@
 # Homebrew Bitterness Units - a measure of alpha acids added to a brew.
 #
 # HBU = oz. hops * % alpha acid
+# http://brewwiki.com/index.php/Alpha_Acid_Units
 
 GramsPerOunce = 28.349523
 
