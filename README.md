@@ -1,4 +1,4 @@
 Beer!
 =====
 
-Notes on beer that me and my sister have made.
+Notes on beer that my sister and I have made.
